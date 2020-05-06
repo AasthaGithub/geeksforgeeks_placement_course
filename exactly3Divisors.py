@@ -63,3 +63,5 @@ def exactly3Divisors(N):
         return 0
     else:
         return sum(pre[:N+1])
+
+ #compromising space O(n) or some time in pre-check while building prefix array we could remove sum function as well   
