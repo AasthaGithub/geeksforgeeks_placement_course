@@ -1,0 +1,191 @@
+Advantages of using arrays:
+Arrays allow random access of elements. This makes accessing elements by position faster.
+Arrays have better cache locality that can make a pretty big difference in performance.
+
+char arr1[] = {'g', 'e', 'e', 'k', 's'};
+int arr2[] = {10, 20, 30, 40, 50};
+-------------------------------------------------------------------------------------------------------
+Searching : O(n)
+----------------------------------------------------------------------------------------------------------
+Insertion: O(n)
+---------
+	a. Insert elements at the end of the array.
+---------------------------------------------------
+if(len < N)
+     // space left
+else
+     // array is full	
+
+	b. Insert element at any given index in the array.
+----------------------------------------------------------
+The index of the new element will be idx = pos - 1.
+
+Now, before inserting the element at the index idx, shift all elements from the index idx till end of the array to the right by 1 place. This can be done as:
+for(i = len-1; i >= idx; i--)
+{
+    arr[i+1] = arr[i];
+}
+
+
+Special Case: A special case is needed to be considered is that whether the array is already full or not. If the array is full, then the new element can not be inserted.
+
+---------------------------------------------------------------------------------------------------------------------------
+Deleting O(n) an element K from the array arr[]: 
+--------------
+Search the element K in the array arr[] to find the index at which it is present.
+----------------
+for(i = 0; i < N; i++)
+{
+    if(arr[i] == K)
+        idx = i; return;
+    else
+        Element not Found;
+}
+
+Now, to delete the element present at index idx, left shift all of the elements present after idx by one place and finally reduce the length of the array by 1.
+
+for(i = idx+1; i < len; i++)
+{
+    arr[i-1] = arr[i];
+}
+
+len = len-1;
+
+---------------------------------------------------------------------------------------------------
+
+Rotation by k:
+--------------
+Visually, the process of counter clock-wise array rotation(rotated by say K elements) looks like:
+	Shift all elements after K-th element to the left by K positions.
+	Fill the K blank spaces at the end of the array by first K elements from the original array.
+
+
+1. Simple: TC. :O(N) Memory C.: O(K)
+---------------------------------------
+Say, arr[] = [1, 2, 3, 4, 5, 6, 7], K = 2
+1) Store first K elements in a temp array
+   temp[] = [1, 2]
+2) Shift rest of the arr[]
+   arr[] = [3, 4, 5, 6, 7, 6, 7]
+3) Store back the K elements from temp
+   arr[] = [3, 4, 5, 6, 7, 1, 2]
+
+2. Inplace: TC. :O(N*k) Memory C.: O(1)
+-----------------------------------------
+leftRotate(arr[], d, n)
+start
+  For i = 0 to i < d
+    Left rotate all elements of arr[] by one
+end
+
+3. Juggling: TC. :O(N) Memory C.: O(1)
+---------------------------------------
+This is an extension of the above method. Instead of moving one by one, divide the array in different sets, where number of sets is equal to GCD of N and K and move the elements within sets.
+
+If GCD is 1 as is for the above example array (N = 7 and K = 2), then elements will be moved within one set only, we just start with temp = arr[0] and keep moving arr[I+d] to arr[I] and finally store temp at the right place.
+
+Here is an example for N = 12 and K = 3. GCD of N and K is 3:
+Let arr[] be {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+
+a) Elements are first moved in first set – ArrayRotation
+      {4_ 2 3 7_ 5 6 10_ 8 9 1_ 11 12}
+
+b) Then in second set.
+      {4 5_ 3 7 8_ 6 10 11_ 9 1 2_ 12}
+
+c) Finally in third set.
+       {4 5 6_ 7 8 9_ 10 11 12_ 1 2 3_}
+
+Time Complexity: O(N), where N is the number of elements in the array.
+Auxiliary Space: O(1).
+
+No.of sets = gcd(n,k)
+Outer Loop: i=0 to i< no.of sets ; j=0, temp=i[j]
+A[j] = A[(j+k) % N]
+Inner Loop: ends when d==i; then A[j]=temp
+Increment i to move to next set
+
+Video Link: https://www.youtube.com/watch?v=utE_1ppU5DY
+----------------------------------------------------------------------------------------------
+Reversing Array O(n) ; with no extra space
+
+---------------------
+Iterative Approach:
+--------------------
+traverse the array from both ends and keep swapping elements from both ends until middle of the array is reached.
+1) Initialize start and end indexes as 
+   start = 0, end = N-1
+2) In a loop, swap arr[start] with arr[end] 
+   and change start and end as follows :
+       start = start + 1, 
+       end = end – 1
+--------------------
+Recursive Approach:
+----------------------
+1) Initialize start and end indexes as 
+   start = 0, end = n-1
+2) Swap arr[start] with arr[end]
+3) Recursively call reverse for rest of the array.
+
+void reverseArray(arr[], start, end)
+
+{ 
+
+if (start >= end) return; 
+    
+    
+
+// Swap elements at start and end  
+    
+temp = arr[start];  
+    
+arr[start] = arr[end];
+    
+arr[end] = temp; 
+      
+    
+
+// Recursive Function calling 
+    
+reverseArray(arr, start + 1, end - 1);  
+
+
+}   
+
+-----------------------------------------------------------------------------
+
+
+Sliding Window Technique 
+---------------------------
+This technique shows how a nested for loop in few problems can be converted to single for loop and hence reducing the time complexity.
+
+Naive Approach for calculating max subarray sum of  len k =O(n*k)
+
+Applying sliding window technique : O(n)
+
+	We compute the sum of first k elements out of n terms using a linear loop and store the sum in variable window_sum.
+	Then we will graze linearly over the array till it reaches the end and simultaneously keep track of maximum sum.
+	To get the current sum of block of k elements just subtract the first element from the previous block and add the last element of the current block .
+
+current sum= (window sum - previous + next)
+
+------------------------------------------------------------------------------------------
+Prefix Sum Array
+-------------------
+void fillPrefixSum(int arr[], int N, int prefixSum[]) 
+
+{ 
+    
+prefixSum[0] = arr[0]; 
+  
+    
+// Adding present element  
+    
+// with previous element 
+    
+for (int i = 1; i < N; i++) 
+        
+prefixSum[i] = prefixSum[i-1] + arr[i];
+
+} 
+
